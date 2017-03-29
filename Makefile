@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall -Werror=vla -g -O0
 
-main: subject.o tile.o textdisplay.o gameboard.o builder.o residence.o path.o road.o loadeddice.o fairdice.o main.o
+main: subject.o tile.o textdisplay.o gameboard.o builder.o residence.o path.o road.o loadeddice.o fairdice.o address.o main.o
 	${CXX} ${CXXFLAGS} ${^} -o Constructor
 
 main.o: gameboard.h main.cc

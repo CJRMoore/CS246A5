@@ -1,6 +1,7 @@
 #ifndef RESIDENCE_H
 #define RESIDENCE_H
 #include "subject.h"
+#include "observer.h"
 #include "abstractaddress.h"
 #include <memory>
 
@@ -15,6 +16,9 @@ class Residence: public AbstractAddress {
     void upgrade();
 
     Info getInfo() const override;
+
+    void notify(Subject &whoNotified) override;
+    SubscriptionType subType() const override;
 };
 
 #endif

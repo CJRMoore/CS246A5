@@ -16,6 +16,15 @@ void Residence::upgrade(){
 }
 
 Info Residence::getInfo() const {
-    Info info{0,0};
+    Info info{-1,-1};
     return info;
+}
+
+void Residence::notify(Subject &whoNotified){
+    Info info = whoNotified.getInfo();
+    notifyObservers(SubscriptionType::Builder);
+}
+
+SubscriptionType Residence::subType() const {
+    return SubscriptionType::Tile;
 }

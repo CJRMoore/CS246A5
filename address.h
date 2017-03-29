@@ -5,6 +5,11 @@
 class Address: public AbstractAddress {
   public:
     Address(int index): AbstractAddress(index) {};
+
+    void notify(Subject &whoNotified) override;
+    SubscriptionType subType() const override;
+
+    Info getInfo() const override;
 };
 
 #endif

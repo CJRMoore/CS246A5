@@ -10,9 +10,9 @@
 #include "geese.h"
 
 class GameBoard {
-    std::vector<std::shared_ptr<Tile> > theBoard;
-    std::vector<AbstractAddress> theAddresses;
-    std::vector<AbstractPath> thePaths;
+    std::vector<std::shared_ptr<Tile> > theBoard; // the geese may point to a tile object
+    std::vector<std::shared_ptr<AbstractAddress> > theAddresses;
+    std::vector<std::shared_ptr<AbstractPath> > thePaths;
 
     Geese g;
 

@@ -4,7 +4,7 @@
 
 Subject::~Subject() {}
 
-void Subject::attach(Observer *o){
+void Subject::attach(std::shared_ptr<Observer> o){
     observers.push_back(o);
 }
 
