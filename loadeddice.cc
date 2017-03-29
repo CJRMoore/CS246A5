@@ -1,6 +1,8 @@
 #include "loadeddice.h"
 #include <iostream>
 
+using namespace std;
+
 int LoadedDice::rollDice(){
     int v1, v2;
     cin >> v1 >> v2;

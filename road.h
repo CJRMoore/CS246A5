@@ -7,9 +7,9 @@ class Road: public AbstractPath {
 
   public:
     Road(AbstractPath *ap);
-    ~Road();
 
-    
+    bool hasRoad() const override { return true; };
+    int getIndex() override;    
 };
 
 #endif

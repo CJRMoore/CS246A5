@@ -4,9 +4,10 @@
 
 class Path: public AbstractPath{
   public:
+    Path(int index): AbstractPath(index) {};
     Info getInfo() const override;
 
-    bool hasRoad() const override;
+    bool hasRoad() const override { return false; };
 };
 
 #endif

@@ -4,7 +4,9 @@
 class Dice {
   public:
     virtual int rollDice() = 0;
+    virtual ~Dice() = 0;
 };
 
+inline Dice::~Dice() {};
 #endif
 

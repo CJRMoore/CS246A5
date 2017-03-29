@@ -4,7 +4,9 @@
 
 class LoadedDice: public Dice {
   public:
-    int rollDice();// overrride;
+    int rollDice() override;
+
+    ~LoadedDice() {};
 };
 
 #endif

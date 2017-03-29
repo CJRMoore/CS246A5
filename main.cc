@@ -1,6 +1,6 @@
 #include <iostream>
 #include <string>
-#include "gmeboard.h"
+#include "gameboard.h"
 using namespace std;
 
 int main() {

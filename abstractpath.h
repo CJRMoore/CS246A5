@@ -9,11 +9,10 @@ class AbstractPath: public Subject {
     //virtual void buildRoad(Builder *b) = 0;
 
   public:
+    AbstractPath(): index(-1) {};
+    AbstractPath(int index): index(index) {};
     virtual bool hasRoad() const = 0;
-    Info getInfo() const override;
+    virtual int getIndex() { return index; };
 
-    virtual ~AbstractPath() = 0;
 };
-
-AbstractRoat::~AbstractRoad() {};
 #endif

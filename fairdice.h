@@ -5,6 +5,7 @@
 class FairDice: public Dice {
   public:
     int rollDice() override;
+    ~FairDice() {};
 };
 
 #endif

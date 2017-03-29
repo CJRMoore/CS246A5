@@ -2,8 +2,6 @@
 
 Road::Road(AbstractPath *ap): ap(ap) {}
 
-Road::~Road(){
-    delete ap;
+int Road::getIndex(){
+    return ap->getIndex();
 }
-
-
