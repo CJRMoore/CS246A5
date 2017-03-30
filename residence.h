@@ -14,8 +14,7 @@ class Residence: public AbstractAddress {
     Info triggeredInfo;
 
   public:
-    Residence(std::shared_ptr<AbstractAddress> aa, int index);
-    virtual std::vector<int> upgradeRequirements() = 0;
+    Residence(std::shared_ptr<AbstractAddress> aa, int index): AbstractAddress(index), aa(aa) {};
 //    void upgrade();
 
     //void notify(Subject &whoNotified) override;

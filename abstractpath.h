@@ -5,8 +5,8 @@
 class Builder;
 
 class AbstractPath: public Subject {
+  protected:
     const int index;
-    //virtual void buildRoad(Builder *b) = 0;
 
   public:
     AbstractPath(): index(-1) {};
@@ -14,5 +14,6 @@ class AbstractPath: public Subject {
     virtual bool hasRoad() const = 0;
     virtual int getIndex() { return index; };
 
+    virtual std::vector<int> upgradeRequirements() = 0;
 };
 #endif

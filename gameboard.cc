@@ -2,6 +2,7 @@
 #include "resources.h"
 #include "builder.h"
 #include "path.h"
+#include "road.h"
 #include "address.h"
 #include "basement.h"
 
@@ -57,9 +58,9 @@ void GameBoard::Init(string boardFile) {
         while (!done){
             cout << "Builder " << theColours[int(thePlayers[p]->getColour())] << ", where do you want to build a basement?" << endl;
             cin >> pAddress;
-            if (pAddress >=0 && pAddress <= theBoard.size()) done = true;
+            if (pAddress >=0 && pAddress <= theAddresses.size()) done = true;
             else {
-                cout << "Invalid address (must be in range [0," << (theBoard.size()-1) << "]); try again" << endl;
+                cout << "Invalid address (must be in range [0," << (theAddresses.size()-1) << "]); try again" << endl;
             }
         }
         theAddresses[pAddress] = make_shared<Basement>(theAddresses[pAddress],pAddress);

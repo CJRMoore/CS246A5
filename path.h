@@ -1,6 +1,7 @@
 #ifndef PATH_H
 #define PATH_H
 #include "abstractpath.h"
+#include <vector>
 
 class Path: public AbstractPath{
   public:
@@ -9,6 +10,8 @@ class Path: public AbstractPath{
     Info getInfo() const override;
 
     bool hasRoad() const override { return false; };
+    
+    std::vector<int> upgradeRequirements() override;
 };
 
 #endif

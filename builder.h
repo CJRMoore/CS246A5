@@ -13,14 +13,14 @@
 class Builder: public Observer{
     BuilderType colour;
     std::vector<int> resources;
-    std::vector<std::unique_ptr<Dice> > theDice;
+    std::vector<std::shared_ptr<Dice> > theDice;
+    std::shared_ptr<Dice> currDice;
 
   public:
     Builder(BuilderType colour);
     BuilderType getColour();
-    bool buildableAddress(std::shared_ptr<AbstractAddress> a);
-    void buildRoad(std::shared_ptr<Path> p);
-    void upgradeResidence(std::shared_ptr<Residence> r);
+    bool upgradeAddress(std::shared_ptr<AbstractAddress> a);
+    bool upgradePath(std::shared_ptr<Path> p);
 
     bool isWon();
     int roll(bool whichDice);

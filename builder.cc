@@ -12,16 +12,14 @@ Builder::Builder(BuilderType colour): colour(colour){//, resources(vector<int>(5
 
     theDice.push_back(make_unique<LoadedDice>());
     theDice.push_back(make_unique<FairDice>());
-    //theDice.resize(2);//,nullptr);
-    //theDice[0] = make_unique<LoadedDice>();
-    //theDice[1] = make_unique<FairDice>();
+    currDice = theDice[0];
 }
 
 BuilderType Builder::getColour() {
     return colour;
 }
 
-bool Builder::buildableAddress(shared_ptr<AbstractAddress> a) {
+bool Builder::upgradeAddress(shared_ptr<AbstractAddress> a) {
     vector<int> req = a->upgradeRequirements();
     if (req.size()==0) return false;
 
@@ -37,10 +35,20 @@ bool Builder::buildableAddress(shared_ptr<AbstractAddress> a) {
     }
 }
 
-void Builder::buildRoad(shared_ptr<Path> p) {}
+bool Builder::upgradePath(shared_ptr<Path> p) {
+    vector<int> req = p->upgradeRequirements();
+    if (req.size()==0) return false;
 
-void Builder::upgradeResidence(shared_ptr<Residence> r) {
-    
+    try{
+        for (unsigned int i=0; i<resources.size(); i++) { 
+            if (resources[i] < req[i])  throw(1);
+        }
+        return true;
+    }
+    catch(int){
+        cout << "You do not have enough resources." << endl;
+        return false;
+    }
 }
 
 bool Builder::isWon() {

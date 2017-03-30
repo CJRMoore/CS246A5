@@ -1,7 +1,7 @@
 CXX = g++
 CXXFLAGS = -std=c++14 -Wall -Werror=vla -g -O3
 
-main: subject.o tile.o textdisplay.o gameboard.o builder.o residence.o path.o road.o loadeddice.o fairdice.o address.o basement.o house.o tower.o main.o
+main: subject.o tile.o textdisplay.o builder.o path.o road.o gameboard.o loadeddice.o fairdice.o address.o basement.o house.o tower.o main.o
 	${CXX} ${CXXFLAGS} ${^} -o Constructor
 
 main.o: gameboard.h main.cc
@@ -16,7 +16,7 @@ tile.o: subscriptions.h subject.h observer.h tile.h tile.cc
 textdisplay.o: observer.h textdisplay.h textdisplay.cc
 	${CXX} ${CXXFLAGS} -c textdisplay.cc
 
-gameboard.o: tile.h textdisplay.h gameboard.h gameboard.cc
+gameboard.o: tile.h textdisplay.h abstractpath.h gameboard.h gameboard.cc
 	${CXX} ${CXXFLAGS} -c gameboard.cc
 
 address.o: abstractaddress.h address.h address.cc
@@ -47,6 +47,6 @@ loadeddice.o: dice.h loadeddice.h loadeddice.cc
 	${CXX} ${CXXFLAGS} -c loadeddice.cc
 
 clean:
-	rm *o *.gch
+	rm *o 
 
 .PHONY: clean
