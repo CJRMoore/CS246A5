@@ -1,19 +1,21 @@
 #include <iostream>
 #include <string>
+#include <memory>
+#include "builder.h"
 #include "gameboard.h"
+#include "resources.h"
 using namespace std;
 
 int main() {
   cin.exceptions(ios::eofbit|ios::failbit);
   string cmd, aux;
   GameBoard g;
-  int moves = 0;
+  //int moves = 0;
 
-  // You will need to make changes to this code.
 
   try {
-    //bool gameState = false;
-    //bool boardReady = false;
+    // Set up players and board
+    g.Init("layout.txt");
 
     while (true) {
       cin >> cmd;

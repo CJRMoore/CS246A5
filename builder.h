@@ -2,13 +2,13 @@
 #define BUILDER_H
 #include "observer.h"
 #include "buildertype.h"
+#include "residence.h"
+#include "path.h"
+#include "abstractaddress.h"
 #include "dice.h"
 #include <vector>
 #include <memory>
 
-class Path;
-class Residence;
-class Address;
 
 class Builder: public Observer{
     BuilderType colour;
@@ -18,9 +18,9 @@ class Builder: public Observer{
   public:
     Builder(BuilderType colour);
     BuilderType getColour();
-    void buildResidence(Address *a);
-    void buildRoad(Path *p);
-    void upgradeResidence(Residence *r);
+    bool buildableAddress(std::shared_ptr<AbstractAddress> a);
+    void buildRoad(std::shared_ptr<Path> p);
+    void upgradeResidence(std::shared_ptr<Residence> r);
 
     bool isWon();
     int roll(bool whichDice);

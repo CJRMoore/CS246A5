@@ -2,16 +2,19 @@
 #define ABSTRACTADDRESS_H
 #include "subject.h"
 #include "observer.h"
-#include "buildingtype.h"
+#include "buildingtypes.h"
 
 class Info;
+class Builder;
 
 class AbstractAddress: public Observer, public Subject {
+  protected:
     const int index;
-    BuildingType building;
+//    BuildingType building;
 
   public:
-    AbstractAddress(int index): index(index), building(BuildingType::None) {};
+    AbstractAddress(int index): index(index) {};
+    virtual std::vector<int> upgradeRequirements() = 0;
 };
 
 #endif

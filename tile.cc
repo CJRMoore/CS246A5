@@ -1,5 +1,6 @@
 #include "tile.h"
 #include "info.h"
+#include "buildingtypes.h"
 
 void Tile::notify(Subject &whoNotified){
 
@@ -15,6 +16,6 @@ bool Tile::hasGeese() {
 }
 
 Info Tile::getInfo() const {
-    Info info{index, resource};
+    Info info{BuildingType::Tile, index, resource};
     return info;
 }

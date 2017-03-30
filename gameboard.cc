@@ -3,6 +3,9 @@
 #include "builder.h"
 #include "path.h"
 #include "address.h"
+#include "basement.h"
+
+
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -18,7 +21,7 @@ void GameBoard::Init(string boardFile) {
         stringstream ss(line);
         int r;
         int dV;
-        while (!ss.fail()) {
+        while (!ss.eof()) {
             ss >> r >> dV;
             theBoard.push_back(make_shared<Tile>(r, t++, dV));
         }
@@ -40,6 +43,26 @@ void GameBoard::Init(string boardFile) {
         theBoard[tile]->attach(theAddresses[ad1]);
         theBoard[tile]->attach(theAddresses[ad2]);
         theBoard[tile]->attach(theAddresses[ad3]);
+    }
+
+    // Set up players, then have them place their first residences
+    theColours.push_back("Blue");
+    theColours.push_back("Red");
+    theColours.push_back("Orange");
+    theColours.push_back("Yellow");
+    for (int p = int(BuilderType::Blue); p < int(BuilderType::Yellow); p++) {
+        thePlayers.push_back(make_unique<Builder>(BuilderType(p)));
+        bool done = false;
+        unsigned int pAddress;
+        while (!done){
+            cout << "Builder " << theColours[int(thePlayers[p]->getColour())] << ", where do you want to build a basement?" << endl;
+            cin >> pAddress;
+            if (pAddress >=0 && pAddress <= theBoard.size()) done = true;
+            else {
+                cout << "Invalid address (must be in range [0," << (theBoard.size()-1) << "]); try again" << endl;
+            }
+        }
+        theAddresses[pAddress] = make_shared<Basement>(theAddresses[pAddress],pAddress);
     }
 }
 

@@ -21,11 +21,27 @@ BuilderType Builder::getColour() {
     return colour;
 }
 
-void Builder::buildResidence(Address *a) {}
+bool Builder::buildableAddress(shared_ptr<AbstractAddress> a) {
+    vector<int> req = a->upgradeRequirements();
+    if (req.size()==0) return false;
 
-void Builder::buildRoad(Path *p) {}
+    try{
+        for (unsigned int i=0; i<resources.size(); i++) { 
+            if (resources[i] < req[i])  throw(1);
+        }
+        return true;
+    }
+    catch(int){
+        cout << "You do not have enough resources." << endl;
+        return false;
+    }
+}
 
-void Builder::upgradeResidence(Residence *r) {}
+void Builder::buildRoad(shared_ptr<Path> p) {}
+
+void Builder::upgradeResidence(shared_ptr<Residence> r) {
+    
+}
 
 bool Builder::isWon() {
     return false;
