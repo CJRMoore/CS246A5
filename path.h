@@ -3,7 +3,11 @@
 #include "abstractpath.h"
 #include <vector>
 
+class Builder;
+
 class Path: public AbstractPath{
+    BuilderType owner;
+
   public:
     Path(int index): AbstractPath(index) {};
     ~Path() {};
@@ -11,7 +15,7 @@ class Path: public AbstractPath{
 
     bool hasRoad() const override { return false; };
     
-    std::vector<int> upgradeRequirements() override;
+    std::vector<int> upgradeRequirements(Builder &b) override;
 };
 
 #endif

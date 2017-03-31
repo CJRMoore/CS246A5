@@ -13,6 +13,7 @@ class Subject{
     std::vector<std::shared_ptr<Observer> > observers;
   public:
     void attach(std::shared_ptr<Observer> o);
+    void transfer(Subject *s);
     void notifyObservers(SubscriptionType t);
     virtual Info getInfo() const = 0;
     virtual ~Subject() = 0;

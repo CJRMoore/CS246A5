@@ -16,16 +16,24 @@ class GameBoard {
     std::vector<std::shared_ptr<AbstractAddress> > theAddresses;
     std::vector<std::shared_ptr<AbstractPath> > thePaths;
 
-    std::vector<std::unique_ptr<Builder> > thePlayers;
+    //std::vector<std::unique_ptr<Builder> > thePlayers;
     std::vector<std::string> theColours;
 
     Geese g;
 
   public:
-    void Init(std::string boardFile);
+    void Init(std::string boardFile, std::vector<std::shared_ptr<Builder> > &thePlayers);
     void moveGeese(int t);
     void save(std::string sFile);
     void load(std::string lFile);
+
+    void buildRoad(std::shared_ptr<Builder> &b, int index);
+    void buildResidence(std::shared_ptr<Builder> &b, int index);
+    void upgradeResidence(std::shared_ptr<Builder> &b, int index);
+
+    void distributeResources(int roll);
+
+    std::vector<std::string> getColours() { return theColours; };
 };
 
 #endif

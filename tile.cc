@@ -1,14 +1,18 @@
 #include "tile.h"
 #include "info.h"
 #include "buildingtypes.h"
+#include "buildertype.h"
+
+#include <iostream>
+using namespace std;
 
 void Tile::notify(Subject &whoNotified){
-
+    notifyObservers(SubscriptionType::Tile);
 }
 
 
 SubscriptionType Tile::subType() const { 
-    return SubscriptionType::Tile; 
+    return SubscriptionType::All; 
 }
 
 bool Tile::hasGeese() {
@@ -16,6 +20,6 @@ bool Tile::hasGeese() {
 }
 
 Info Tile::getInfo() const {
-    Info info{BuildingType::Tile, index, resource};
+    Info info{BuildingType::Tile, BuilderType::None, index, resource};
     return info;
 }

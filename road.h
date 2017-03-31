@@ -6,6 +6,7 @@
 #include <memory>
 
 class Info;
+class Builder;
 
 class Road: public AbstractPath {
     std::shared_ptr<AbstractPath> ap;
@@ -18,7 +19,8 @@ class Road: public AbstractPath {
     int getIndex() override;    
     Info getInfo() const override;
 
-    std::vector<int> upgradeRequirements() override;
+    std::vector<int> upgradeRequirements(Builder &b) override;
+    void setOwner(BuilderType o) override { ap->setOwner(o); }
 };
 
 #endif

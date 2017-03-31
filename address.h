@@ -1,7 +1,10 @@
 #ifndef ADDRESS_H
 #define ADDRESS_H
 #include "abstractaddress.h"
+#include "buildertype.h"
 #include <vector>
+
+class Builder;
 
 class Address: public AbstractAddress {
     bool adjacent; //set by path
@@ -10,10 +13,9 @@ class Address: public AbstractAddress {
     Address(int index): AbstractAddress(index) {};
 
     void notify(Subject &whoNotified) override;
-    SubscriptionType subType() const override;
 
     Info getInfo() const override;
-    std::vector<int> upgradeRequirements() override;
+    std::vector<int> upgradeRequirements(Builder &b) override;
 };
 
 #endif

@@ -13,10 +13,10 @@ int Road::getIndex(){
 }
 
 Info Road::getInfo() const {
-    Info info{BuildingType::Path,index,int(ResourceType::PARK)};
+    Info info{BuildingType::Path,owner,index,int(ResourceType::PARK)};
     return info;
 }
 
-vector<int> Road::upgradeRequirements() {
+vector<int> Road::upgradeRequirements(Builder &b) {
     return vector<int>(0);
 }

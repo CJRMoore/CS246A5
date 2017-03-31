@@ -2,10 +2,12 @@
 #define INFO_H
 #include "resources.h"
 #include "buildingtypes.h"
+#include "buildertype.h"
 
 struct Info {
-    BuildingType buildType;
+    BuildingType buildingType;
+    BuilderType owner;
     int index;
-    int resource;
+    ResourceType resource;
 };
 #endif

@@ -13,7 +13,7 @@
 
 using namespace std;
 
-void GameBoard::Init(string boardFile) {
+void GameBoard::Init(string boardFile, vector<shared_ptr<Builder> > &thePlayers) {
     // Set up tiles and read tile layout from file
     ifstream bf(boardFile);
     string line;
@@ -42,8 +42,11 @@ void GameBoard::Init(string boardFile) {
         int tile, ad1, ad2, ad3;
         ss >> tile >> ad1 >> ad2 >> ad3;
         theBoard[tile]->attach(theAddresses[ad1]);
+        theBoard[tile]->attach(theAddresses[ad1+1]);
         theBoard[tile]->attach(theAddresses[ad2]);
+        theBoard[tile]->attach(theAddresses[ad2+1]);
         theBoard[tile]->attach(theAddresses[ad3]);
+        theBoard[tile]->attach(theAddresses[ad3+1]);
     }
 
     // Set up players, then have them place their first residences
@@ -51,21 +54,53 @@ void GameBoard::Init(string boardFile) {
     theColours.push_back("Red");
     theColours.push_back("Orange");
     theColours.push_back("Yellow");
-    for (int p = int(BuilderType::Blue); p < int(BuilderType::Yellow); p++) {
-        thePlayers.push_back(make_unique<Builder>(BuilderType(p)));
+    Builder::setColours(theColours);
+
+    for (int p = int(BuilderType::Blue); p <= int(BuilderType::Yellow); p++) {
         bool done = false;
         unsigned int pAddress;
         while (!done){
             cout << "Builder " << theColours[int(thePlayers[p]->getColour())] << ", where do you want to build a basement?" << endl;
             cin >> pAddress;
-            if (pAddress >=0 && pAddress <= theAddresses.size()) done = true;
+            if (pAddress >=0 && pAddress < theAddresses.size()) done = true;
             else {
                 cout << "Invalid address (must be in range [0," << (theAddresses.size()-1) << "]); try again" << endl;
             }
         }
-        theAddresses[pAddress] = make_shared<Basement>(theAddresses[pAddress],pAddress);
+        theAddresses[pAddress] = thePlayers[p]->buildAtAddress(theAddresses[pAddress]);
+        theAddresses[pAddress]->attach(thePlayers[p]);
+        thePlayers[p]->resetResources();
     }
 }
+
+
+void GameBoard::buildRoad(shared_ptr<Builder> &b, int index){
+    if (index >= thePaths.size()) throw(string("Invalid path."));
+    thePaths[index] = b->upgradePath(thePaths[index]);
+}
+
+void GameBoard::buildResidence(shared_ptr<Builder> &b, int index){
+    if (index >= theAddresses.size()) throw(string("Invalid address."));
+    theAddresses[index] = b->buildAtAddress(theAddresses[index]);
+    theAddresses[index]->attach(b);
+}
+
+void GameBoard::upgradeResidence(shared_ptr<Builder> &b, int index){
+    if (index >= theAddresses.size()) throw(string("Invalid address."));
+    theAddresses[index] = b->upgradeAddress(theAddresses[index]);
+    theAddresses[index]->attach(b);
+}
+
+
+
+void GameBoard::distributeResources(int r){
+    for (unsigned int i=0; i<theBoard.size(); i++){
+        if (theBoard[i]->getDiceValue() == r) {
+            theBoard[i]->notifyObservers(SubscriptionType::Tile);
+        }
+    }
+}
+
 
 void GameBoard::moveGeese(int t){}
 
