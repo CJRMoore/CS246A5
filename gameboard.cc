@@ -56,6 +56,14 @@ void GameBoard::Init(string boardFile, vector<shared_ptr<Builder> > &thePlayers)
     theColours.push_back("Yellow");
     Builder::setColours(theColours);
 
+    vector<string> theResources;
+    theResources.push_back("BRICK");
+    theResources.push_back("Energy");
+    theResources.push_back("GLASS");
+    theResources.push_back("HEAT");
+    theResources.push_back("WIFI");
+    Builder::setResourceStr(theResources);
+
     for (int p = int(BuilderType::Blue); p <= int(BuilderType::Yellow); p++) {
         bool done = false;
         unsigned int pAddress;
@@ -104,6 +112,11 @@ void GameBoard::distributeResources(int r){
 
 void GameBoard::moveGeese(int t){}
 
-void GameBoard::save(string sFile) {}
+string GameBoard::save(){
+    stringstream ss;
+    for (int i=0; i<theBoard.size(); i++) ss << int(theBoard[i]->getInfo().resource) << " " << theBoard[i]->getDiceValue() << " ";
+    ss << endl;
+    return ss.str();
+}
 
 void GameBoard::load(string lFile) {}

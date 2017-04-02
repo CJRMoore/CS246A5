@@ -20,6 +20,7 @@ class AbstractAddress: public Observer, public Subject {
     AbstractAddress(int index): index(index), owner(BuilderType::None) {};
     virtual std::vector<int> upgradeRequirements(Builder &b) = 0;
     virtual int getIndex() { return index; };
+    virtual int getResLevel()=0;
 
     virtual void setOwner(BuilderType o){ owner = o; };
 

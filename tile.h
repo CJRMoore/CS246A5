@@ -6,13 +6,13 @@
 #include "subject.h"
 
 class Tile: public Observer, public Subject {
-    const int resource;
+    const ResourceType resource;
     const int index;
     const int diceValue;
 
   public:
     Tile(int resource, int index, int diceValue)
-        : resource(resource), index(index), diceValue(diceValue) {};
+        : resource(ResourceType(resource)), index(index), diceValue(diceValue) {};
 
     void notify(Subject &whoNotified) override;
     SubscriptionType subType() const override;

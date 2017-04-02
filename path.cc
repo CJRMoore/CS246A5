@@ -8,7 +8,7 @@
 using namespace std;
 
 Info Path::getInfo() const {
-    Info info{BuildingType::Path, owner, index, int(ResourceType::PARK)};
+    Info info{BuildingType::Path, owner, index, ResourceType::PARK};
     return info;
 }
 

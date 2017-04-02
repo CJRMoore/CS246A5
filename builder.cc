@@ -11,13 +11,18 @@
 #include "path.h"
 
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
 
 vector<string> Builder::playerColours = vector<string>(0);
+vector<string> Builder::resourceStr = vector<string>(0);
 
-Builder::Builder(BuilderType colour): colour(colour), rolled(false), numPoints(0){
+Builder::Builder(BuilderType colour)
+: colour(colour), rolled(false), numPoints(0)
+{
     resources.resize(5,99);
+    turnGains.resize(5,0);
 
     theDice.push_back(make_unique<LoadedDice>());
     theDice.push_back(make_unique<FairDice>());
@@ -50,6 +55,8 @@ shared_ptr<AbstractAddress> Builder::buildAtAddress(shared_ptr<AbstractAddress> 
             throw(ss.str());
         }
         else na = make_shared<Basement>(a);
+        for (int i=0; i<resources.size(); i++) resources[i] -= req[i];
+        ownedAddresses.push_back(a);
         numPoints++;
         return na;
     }
@@ -78,7 +85,14 @@ shared_ptr<AbstractAddress> Builder::upgradeAddress(shared_ptr<AbstractAddress> 
         }
         if (req[0]==0) na = make_shared<House>(a);
         else na = make_shared<Tower>(a);
+        for (int i=0; i<resources.size(); i++) resources[i] -= req[i];
         numPoints++;
+        for (int j=0; j<ownedAddresses.size(); j++){
+            if (ownedAddresses[j]->getIndex() == a->getIndex()){
+                ownedAddresses[j] = a;
+                break;
+            }
+        }
         return na;
     }
     catch(int){
@@ -100,6 +114,8 @@ shared_ptr<AbstractPath> Builder::upgradePath(shared_ptr<AbstractPath> p) {
             if (resources[i] < req[i])  throw(1);
         }
         shared_ptr<AbstractPath> np = make_shared<Road>(p);
+        for (int i=0; i<resources.size(); i++) resources[i] -= req[i];
+        ownedRoads.push_back(p);
         return np;
     }
     catch(int){
@@ -124,6 +140,16 @@ void Builder::notify(Subject &whoNotified) {
     Info info = whoNotified.getInfo();
     if (info.resource != ResourceType::PARK){
         resources[int(info.resource)]++;
+        turnGains[int(info.resource)]++;
+    }
+}
+
+void Builder::printTurnGains(){
+    if (!(std::any_of(turnGains.begin(), turnGains.end(), [](int i){ return i>0; } ))) return;
+    cout << "Builder " << playerColours[int(colour)] << " gained:" << endl;
+    for (int i=0; i<resources.size(); i++){
+        if (turnGains[i]>0) cout << "\t" << turnGains[i] << " " << resourceStr[i] << endl;
+        turnGains[i] = 0;
     }
 }
 
@@ -136,7 +162,21 @@ void Builder::resetResources(){
 }
 
 
-ostream &operator<<(ostream &out, shared_ptr<Builder> b){
+ostream &operator<<(ostream &out, const shared_ptr<Builder> b){
     out << b->playerColours[int(b->colour)] << " has " << b->numPoints << " points, " << b->resources[0] << " brick, " << b->resources[1] << " energy, " << b->resources[2] << " glass, " << b->resources[3] << " heat, and " << b->resources[4] << " WiFi." << endl;
+    return out;
+}
+
+ofstream &operator<<(ofstream &out, const shared_ptr<Builder> b){
+    for (int i=0; i<b->resources.size(); i++) out << b->resources[i]  << " ";
+    if (b->ownedRoads.size()>0) out << "r ";
+    for (int i=0; i<b->ownedRoads.size(); i++) out << b->ownedRoads[i]->getIndex() << " ";
+    if (b->ownedAddresses.size()>0) out << "h ";
+    for (int i=0; i<b->ownedAddresses.size(); i++){
+        int bt = b->ownedAddresses[i]->getResLevel();
+        out << b->ownedAddresses[i]->getIndex() << " " << (bt>0?(bt==1?"H":"T"):"B");
+    }
+    out << endl;
+
     return out;
 }

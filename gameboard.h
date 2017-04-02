@@ -24,7 +24,7 @@ class GameBoard {
   public:
     void Init(std::string boardFile, std::vector<std::shared_ptr<Builder> > &thePlayers);
     void moveGeese(int t);
-    void save(std::string sFile);
+    std::string save();
     void load(std::string lFile);
 
     void buildRoad(std::shared_ptr<Builder> &b, int index);

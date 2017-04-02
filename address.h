@@ -13,6 +13,7 @@ class Address: public AbstractAddress {
     Address(int index): AbstractAddress(index) {};
 
     void notify(Subject &whoNotified) override;
+    int getResLevel() override { return 0; };
 
     Info getInfo() const override;
     std::vector<int> upgradeRequirements(Builder &b) override;

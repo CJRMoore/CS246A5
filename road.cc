@@ -13,7 +13,7 @@ int Road::getIndex(){
 }
 
 Info Road::getInfo() const {
-    Info info{BuildingType::Path,owner,index,int(ResourceType::PARK)};
+    Info info{BuildingType::Path,owner,index,ResourceType::PARK};
     return info;
 }
 
