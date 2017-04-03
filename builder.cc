@@ -163,6 +163,22 @@ void Builder::restorePlayerStats(GameBoard &g, std::string &s){
     resources = tmpRes;
 }
 
+
+string Builder::listOwnedResidences(){
+    stringstream ss;
+    //for (int i=0; i<ownedPaths.size(); i++){
+    //    ss << "\t" << ownedPaths[i]->getIndex() << " Path" << endl;
+    //}
+    for (int i=0; i<ownedAddresses.size(); i++){
+        int rl = ownedAddresses[i]->getResLevel();
+        int ind = ownedAddresses[i]->getIndex();
+        ss << "\t" << (ind<10?" ":"") << ind << " " << (rl>0?(rl>1?"T":"H"):"B") << endl;
+    }
+
+    return ss.str();
+}
+
+
 bool Builder::isWon() {
     return numPoints>=10?true:false;
 }

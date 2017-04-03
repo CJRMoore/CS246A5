@@ -13,7 +13,7 @@ class Residence: public AbstractAddress {
     std::shared_ptr<AbstractAddress> aa;
 
   public:
-    Residence(std::shared_ptr<AbstractAddress> aa): AbstractAddress(aa->getIndex()), aa(aa) {};
+    Residence(std::shared_ptr<AbstractAddress> aa): AbstractAddress(aa->getIndex(),aa->getOwner()), aa(aa) {};
     int getIndex() override { return aa->getIndex(); };
 
     void setOwner(BuilderType o) override { aa->setOwner(o); };

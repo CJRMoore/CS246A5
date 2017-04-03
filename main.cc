@@ -115,6 +115,7 @@ int main(int argc, char** argv) {
         shared_ptr<Builder> currPlayer;
         thePlayers[0]->resetResources();
 
+        // ------- Begin/resume game -------
         bool done = false;
         while (!done) {
             currPlayer = thePlayers[turnCounter];
@@ -125,39 +126,42 @@ int main(int argc, char** argv) {
                 cin >> cmd;
             
                 try{
-                    if (cmd == "loaded"){ 
+                    if (cmd == "loaded"){ // Set dice to loaded 
                         cout << "Dice set to loaded." << endl;
                         currPlayer->setDice(0); 
                     }
-                    else if (cmd == "fair"){ 
+                    else if (cmd == "fair"){ // Set dice to fair
                         cout << "Dice set to fair." << endl;
                         currPlayer->setDice(1); 
                     }
-                    else if (cmd == "roll"){ 
+                    else if (cmd == "roll"){ // Roll dice
                         g.distributeResources(currPlayer->roll()); 
                         for (int i=0; i<thePlayers.size(); i++) thePlayers[i]->printTurnGains();
                     }
-                    else if (cmd == "board"){}
-                    else if (cmd == "status"){ cout << currPlayer; }
-                    else if (cmd == "residences"){}
-                    else if (cmd == "build-road"){ 
+                    else if (cmd == "board"){ // Print board (TO BE IMPLEMENTED
+                    }
+                    else if (cmd == "status"){ cout << currPlayer; } // Print status of player
+                    else if (cmd == "residences"){ // Print player's residences
+                        cout << g.getColours()[turnCounter] << " has built:" << endl 
+                             << currPlayer->listOwnedResidences();
+                    }
+                    else if (cmd == "build-road"){  // Build road on unused path
                         int path;
                         cin >> path;
                         g.buildRoad(currPlayer, path);
                     }
-                    else if (cmd == "build-res"){
+                    else if (cmd == "build-res"){ // Build residence at unused address
                         int res;
                         cin >> res;
                         g.buildResidence(currPlayer, res);
                     }
-                    else if (cmd == "improve"){
+                    else if (cmd == "improve"){ // Improve existing residence located at address
                         int res;
                         cin >> res;
                         g.upgradeResidence(currPlayer, res);
                     }
-                    else if (cmd == "trade"){}
-                    // Save game to file
-                    else if (cmd == "save"){
+                    else if (cmd == "trade"){} // Trade with other player
+                    else if (cmd == "save"){ // Save game to file
                         string sFile;
                         cin >> sFile;
                         ofstream f(sFile);
@@ -173,8 +177,8 @@ int main(int argc, char** argv) {
                             break;
                         }
                     }
-                    else if (cmd == "help"){}
-                    else if (cmd == "next"){
+                    else if (cmd == "help"){} // Print help text
+                    else if (cmd == "next"){ // Finish turn
                         turnCounter = (turnCounter+1)%4;
                         cout << endl;
                         break;

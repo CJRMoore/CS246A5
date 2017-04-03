@@ -18,11 +18,13 @@ class AbstractAddress: public Observer, public Subject {
 
   public:
     AbstractAddress(int index): index(index), owner(BuilderType::None) {};
+    AbstractAddress(int index, BuilderType owner): index(index), owner(owner) {};
     virtual std::vector<int> upgradeRequirements(Builder &b) = 0;
     virtual int getIndex() { return index; };
     virtual int getResLevel()=0;
 
     virtual void setOwner(BuilderType o){ owner = o; };
+    BuilderType getOwner(){ return owner; };
 
     SubscriptionType subType() const override { return SubscriptionType::Tile; };
 };

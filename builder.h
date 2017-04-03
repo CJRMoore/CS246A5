@@ -53,6 +53,8 @@ class Builder: public Observer{
     void resetTurn(){ rolled = false; };
     void printTurnGains();
 
+    std::string listOwnedResidences();
+
     void restorePlayerStats(GameBoard &g, std::string &s);
 
     ~Builder() {};
