@@ -124,9 +124,47 @@ shared_ptr<AbstractPath> Builder::upgradePath(shared_ptr<AbstractPath> p) {
     }
 }
 
+void Builder::restorePlayerStats(GameBoard &g, std::string &s){
+    stringstream ss(s);
+    vector<int> res(5);
+    ss >> resources[0] >> resources[1] >> resources[2] >> resources[3] >> resources[4];
+    vector<int> tmpRes = resources;
+    resources = std::vector<int>(5,9999); // building and upgrading checks player resource values
+                                          // ensures buildings and roads will be completed
+    string l;
+    ss >> l;
+    shared_ptr<Builder> me;
+    me.reset(this);
+    // Player owned roads
+    if (l == "r"){
+        string l2;
+        while (ss >> l2){
+            if (l2=="h"){
+                l = l2;
+                break;
+            }
+            stringstream ss2(l2);
+            int r; 
+            ss2 >> r;
+            g.buildRoad(me, r);
+        }
+    }
+    // Player owned residences (should be at least one)
+    if (l == "h"){
+        int a; 
+        string residence; 
+        while (ss >> a >> residence){ // rest of line only has this data
+            if (ss.fail()) break;
+            g.buildResidence(me,a);
+            if (residence=="H" || residence=="T") g.upgradeResidence(me,a);
+            if (residence=="T") g.upgradeResidence(me,a);
+        }
+    }
+    resources = tmpRes;
+}
 
 bool Builder::isWon() {
-    return false;
+    return numPoints>=10?true:false;
 }
 
 int Builder::roll(){

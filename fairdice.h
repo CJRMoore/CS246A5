@@ -4,6 +4,7 @@
 
 class FairDice: public Dice {
   public:
+    void setSeed(unsigned int s) override;
     int rollDice() override;
     ~FairDice() {};
 };

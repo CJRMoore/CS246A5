@@ -4,6 +4,7 @@
 
 class LoadedDice: public Dice {
   public:
+    void setSeed(unsigned int s) override {};
     int rollDice() override;
 
     ~LoadedDice() {};

@@ -10,23 +10,62 @@
 #include <iostream>
 #include <fstream>
 #include <sstream>
+#include <cstdlib>
 
 using namespace std;
 
 void GameBoard::Init(string boardFile, vector<shared_ptr<Builder> > &thePlayers) {
     // Set up tiles and read tile layout from file
-    ifstream bf(boardFile);
-    string line;
-    int t=0;
-    while (getline(bf,line)){ // input as either pairs or one line
-        stringstream ss(line);
-        int r;
-        int dV;
-        while (!ss.eof()) {
-            ss >> r >> dV;
-            theBoard.push_back(make_shared<Tile>(r, t++, dV));
+    // In principle, would work for expanded board size
+    // Random board implemented below
+    bool loadedFromFile = false;
+    ifstream bf;
+    if (boardFile!="") {
+        bf.open(boardFile);
+        if (!bf.fail()){ // boardFile is a file
+            string line;
+            int t=0;
+            while (getline(bf,line)){ // input as either pairs or one line
+                stringstream ss(line);
+                int r, diceValue;
+                while (!ss.eof()) {
+                    ss >> r >> diceValue;
+                    theBoard.push_back(make_shared<Tile>(r, t++, diceValue));
+                }
+            }
+        }
+        else{ // boardFile was not a layout file, but a string from a loaded file
+            loadedFromFile = true;
+            stringstream ss(boardFile);
+            int r, diceValue, t=0;
+            while (ss >> r >> diceValue){
+                theBoard.push_back(make_shared<Tile>(r, t++, diceValue));
+            }
         }
     }
+    // Random board
+    else{
+        vector<int> res(3,4);
+        res.push_back(3);
+        res.push_back(3);
+        res.push_back(1);
+
+        for (int i=0; i<19; i++){
+            int r = rand()%(res[0]+res[1]+res[2]+res[3]+res[4]+res[5]);
+            int whichRes = -1;
+            int gtlt=0;
+            for (int j=0; j<res.size(); j++){
+                gtlt += res[j];
+                if (r < gtlt){
+                    whichRes = j;
+                    res[j]--;
+                    break;
+                }
+            }
+            theBoard.push_back(make_shared<Tile>(whichRes, i, rand()%6+1));
+        }
+    }
+
 
     // Set up addresses
     for (int a=0; a<54; a++) theAddresses.push_back(make_shared<Address>(a));
@@ -37,6 +76,7 @@ void GameBoard::Init(string boardFile, vector<shared_ptr<Builder> > &thePlayers)
     // Set up address-path observer-subject relationships
     // Hard-coded because I don't want to learn graph theory
     ifstream apf("TileAddressRelationship.txt");
+    string line;
     while (getline(apf,line)){
         stringstream ss(line);
         int tile, ad1, ad2, ad3;
@@ -64,20 +104,22 @@ void GameBoard::Init(string boardFile, vector<shared_ptr<Builder> > &thePlayers)
     theResources.push_back("WIFI");
     Builder::setResourceStr(theResources);
 
-    for (int p = int(BuilderType::Blue); p <= int(BuilderType::Yellow); p++) {
-        bool done = false;
-        unsigned int pAddress;
-        while (!done){
-            cout << "Builder " << theColours[int(thePlayers[p]->getColour())] << ", where do you want to build a basement?" << endl;
-            cin >> pAddress;
-            if (pAddress >=0 && pAddress < theAddresses.size()) done = true;
-            else {
-                cout << "Invalid address (must be in range [0," << (theAddresses.size()-1) << "]); try again" << endl;
+    if (!loadedFromFile){
+        for (int p = int(BuilderType::Blue); p <= int(BuilderType::Yellow); p++) {
+            bool done = false;
+            unsigned int pAddress;
+            while (!done){
+                cout << "Builder " << theColours[int(thePlayers[p]->getColour())] << ", where do you want to build a basement?" << endl;
+                cin >> pAddress;
+                if (pAddress >=0 && pAddress < theAddresses.size()) done = true;
+                else {
+                    cout << "Invalid address (must be in range [0," << (theAddresses.size()-1) << "]); try again" << endl;
+                }
             }
+            theAddresses[pAddress] = thePlayers[p]->buildAtAddress(theAddresses[pAddress]);
+            theAddresses[pAddress]->attach(thePlayers[p]);
+            thePlayers[p]->resetResources();
         }
-        theAddresses[pAddress] = thePlayers[p]->buildAtAddress(theAddresses[pAddress]);
-        theAddresses[pAddress]->attach(thePlayers[p]);
-        thePlayers[p]->resetResources();
     }
 }
 
@@ -119,4 +161,10 @@ string GameBoard::save(){
     return ss.str();
 }
 
-void GameBoard::load(string lFile) {}
+void GameBoard::load(string lFile, vector<shared_ptr<Builder> > &thePlayers) {
+
+}
+
+void GameBoard::setSeed(unsigned int s){
+    srand(s);
+}

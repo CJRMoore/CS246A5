@@ -6,11 +6,14 @@
 #include "path.h"
 #include "abstractaddress.h"
 #include "dice.h"
+#include "gameboard.h"
 #include <vector>
 #include <memory>
 #include <iostream>
 #include <fstream>
 #include <string>
+
+class GameBoard;
 
 class Builder: public Observer{
     BuilderType colour;
@@ -33,6 +36,7 @@ class Builder: public Observer{
 
     bool isWon();
     int roll();
+    void setSeed(unsigned int s){ theDice[1]->setSeed(s); };
 
     void notify(Subject &whoNotified) override;
     SubscriptionType subType() const override;
@@ -48,6 +52,8 @@ class Builder: public Observer{
     void setDice(bool whichDice);
     void resetTurn(){ rolled = false; };
     void printTurnGains();
+
+    void restorePlayerStats(GameBoard &g, std::string &s);
 
     ~Builder() {};
     friend std::ostream &operator<<(std::ostream &out, const std::shared_ptr<Builder> b);
