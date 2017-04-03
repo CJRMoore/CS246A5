@@ -17,7 +17,8 @@ class Tile: public Observer, public Subject {
 
     void notify(Subject &whoNotified) override;
     SubscriptionType subType() const override;
-    int getDiceValue(){ return diceValue; };
+    virtual int getDiceValue(){ return diceValue; };
+    virtual int getIndex(){ return index; };
 
     bool hasGeese();
 

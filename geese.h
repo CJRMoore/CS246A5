@@ -1,12 +1,23 @@
 #ifndef GEESE_H
 #define GEESE_H
+#include "resources.h"
+#include "subscriptions.h"
+#include "observer.h"
+#include "subject.h"
+#include "tile.h"
+#include <memory>
 
-class Tile;
+class Geese: public Observer, public Subject {
+    std::shared_ptr<Tile> currTile;
 
-class Geese {
-    Tile *currTile;
   public:
-    void moveTo(Tile *t);
+    Geese(shared_ptr<Tile> currTile)
+        : currTile(currTile) {};
+
+    int getDiceValue() override { return currTile->getDiceValue(); };
+    int getIndex() override { return currTile->getIndex(); };
+
+    Info getInfo() const override;
 };
 
 #endif
