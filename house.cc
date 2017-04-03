@@ -21,9 +21,14 @@ Info House::getInfo() const {
 }
 
 void House::notify(Subject &whoNotified){
-    triggeredResource = whoNotified.getInfo().resource;
-    notifyObservers(SubscriptionType::Address);
-    notifyObservers(SubscriptionType::Tile);
+    Info info = whoNotified.getInfo();
+
+    if (info.buildingType==BuildingType::Path) notifyObservers(SubscriptionType::Path);
+    else if (info.buildingType==BuildingType::Tile){
+        triggeredResource = whoNotified.getInfo().resource;
+        notifyObservers(SubscriptionType::Address);
+        notifyObservers(SubscriptionType::Tile);
+    }
 }
 
 vector<int> House::upgradeRequirements(Builder &b){

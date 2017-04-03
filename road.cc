@@ -2,6 +2,7 @@
 #include "subject.h"
 #include "buildingtypes.h"
 #include "info.h"
+#include "buildertype.h"
 #include <vector>
 
 using namespace std;
@@ -19,4 +20,9 @@ Info Road::getInfo() const {
 
 vector<int> Road::upgradeRequirements(Builder &b) {
     return vector<int>(0);
+}
+
+void Road::notify(Subject &whoNotified){
+    Info info = whoNotified.getInfo();
+    if (info.owner!=BuilderType::None) notifyObservers(SubscriptionType::Tile);
 }

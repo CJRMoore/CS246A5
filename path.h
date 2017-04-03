@@ -17,7 +17,6 @@ class Path: public AbstractPath{
 
     // Observer overrides
     void notify(Subject &whoNotified) override;
-    SubscriptionType subType() const override;
 
     bool hasRoad() const override { return false; };
     

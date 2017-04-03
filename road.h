@@ -19,8 +19,12 @@ class Road: public AbstractPath {
     int getIndex() override;    
     Info getInfo() const override;
 
+    void notify(Subject &whoNotified) override;
+
     std::vector<int> upgradeRequirements(Builder &b) override;
     void setOwner(BuilderType o) override { ap->setOwner(o); }
+
+
 };
 
 #endif

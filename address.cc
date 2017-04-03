@@ -10,8 +10,14 @@ using namespace std;
 #include <iostream>
 void Address::notify(Subject &whoNotified){
     Info info = whoNotified.getInfo();
-    if (whoNotified.getInfo().owner == BuilderType::Check && owner!=BuilderType::None){
+    if (info.buildingType==BuildingType::Path && owner!=BuilderType::None && owner!=BuilderType::Check){
         notifyObservers(SubscriptionType::Path);
+        cout << "ADDRESS NOTIFYING ADDRESS" << endl;
+        return;
+    }
+    else if (info.buildingType == BuildingType::Path && owner == BuilderType::Check && info.resource!=ResourceType::PARKr{
+        adjacent = true;
+        return;
     }
     triggeredResource = whoNotified.getInfo().resource;
     if (owner == BuilderType::None) return;
@@ -28,7 +34,8 @@ vector<int> Address::upgradeRequirements(Builder &b){
     vector<int> theRequirements(5,0);
 
     owner = BuilderType::Check;
-    adjacent = true;
+    adjacent = false;
+    notifyObservers(SubscriptionType::Path);
     if (adjacent==true) {
         owner = BuilderType::None;
         throw(string("Cannot build residence adjacent to another."));

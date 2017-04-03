@@ -6,6 +6,7 @@
 #include "subject.h"
 
 class Tile: public Observer, public Subject {
+  protected:
     const ResourceType resource;
     const int index;
     const int diceValue;

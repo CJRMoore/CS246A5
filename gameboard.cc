@@ -95,17 +95,16 @@ void GameBoard::Init(string boardFile, vector<shared_ptr<Builder> > &thePlayers)
         theBoard[tile]->attach(theAddresses[ad3+1]);
     }
 
-    // Set up adddress-path oberver-subect relationships
-    ifstream atf("AddressPathRelationship.txt");
-    while (getline(atf,line)){
+    // Set up adddress-address oberver-subect relationships
+    ifstream aaf("AddressAddressRelationship.txt");
+    while (getline(aaf,line)){
         stringstream ss(line);
-        int address, path;
-        ss >> address;
+        int a1, a2;
+        ss >> a1;
         while (true){
-            ss >> path;
+            ss >> a2;
             if (ss.fail()) break;
-            theAddresses[address]->attach(thePaths[path]);
-            thePaths[path]->attach(theAddresses[address]);
+            theAddresses[a1]->attach(theAddresses[a2]);
         }
     }
 
@@ -131,12 +130,20 @@ void GameBoard::Init(string boardFile, vector<shared_ptr<Builder> > &thePlayers)
             while (!done){
                 cout << "Builder " << theColours[int(thePlayers[p]->getColour())] << ", where do you want to build a basement?" << endl;
                 cin >> pAddress;
-                if (pAddress >=0 && pAddress < theAddresses.size()) done = true;
+                if (pAddress >=0 && pAddress < theAddresses.size()) {
+                    try{
+                        theAddresses[pAddress] = thePlayers[p]->buildAtAddress(theAddresses[pAddress]);
+                        done = true;
+                    }
+                    catch(string s){
+                        cout << s << endl;
+                    }
+                }
                 else {
                     cout << "Invalid address (must be in range [0," << (theAddresses.size()-1) << "]); try again" << endl;
                 }
             }
-            theAddresses[pAddress] = thePlayers[p]->buildAtAddress(theAddresses[pAddress]);
+            //theAddresses[pAddress] = thePlayers[p]->buildAtAddress(theAddresses[pAddress]);
             theAddresses[pAddress]->attach(thePlayers[p]);
             thePlayers[p]->resetResources();
         }

@@ -22,9 +22,18 @@ Info Basement::getInfo() const {
 }
 
 void Basement::notify(Subject &whoNotified){
-    triggeredResource = whoNotified.getInfo().resource;
-    notifyObservers(SubscriptionType::Address);
-    notifyObservers(SubscriptionType::Tile);
+    Info info = whoNotified.getInfo();
+
+    cout << "BASEMENT NOTIFIED" << endl;
+    if (info.buildingType==BuildingType::Path) {
+        notifyObservers(SubscriptionType::Path);
+        cout << "SUCCESS" << endl;
+    }
+    else if (info.buildingType==BuildingType::Tile){
+        triggeredResource = whoNotified.getInfo().resource;
+        notifyObservers(SubscriptionType::Address);
+        notifyObservers(SubscriptionType::Tile);
+    }
 }
 
 

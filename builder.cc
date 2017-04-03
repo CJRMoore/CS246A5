@@ -64,10 +64,10 @@ shared_ptr<AbstractAddress> Builder::buildAtAddress(shared_ptr<AbstractAddress> 
         cout << "You do not have enough resources." << endl;
         return a;
     }
-    catch(string s){
-        cout << s << endl;
-        return a;
-    }
+    //catch(string s){
+    //    cout << s << endl;
+    //    return a;
+    //}
 }
 
 shared_ptr<AbstractAddress> Builder::upgradeAddress(shared_ptr<AbstractAddress> a) {
@@ -199,7 +199,7 @@ int Builder::roll(){
 
 void Builder::notify(Subject &whoNotified) {
     Info info = whoNotified.getInfo();
-    if (info.resource != ResourceType::PARK){
+    if (info.owner!=BuilderType::Check && info.resource!=ResourceType::PARK){
         resources[int(info.resource)]++;
         turnGains[int(info.resource)]++;
     }

@@ -21,9 +21,14 @@ Info Tower::getInfo() const {
 }
 
 void Tower::notify(Subject &whoNotified){
-    triggeredResource = whoNotified.getInfo().resource;
-    notifyObservers(SubscriptionType::Builder);
-    notifyObservers(SubscriptionType::Tile);
+    Info info = whoNotified.getInfo();
+    
+    if (info.buildingType==BuildingType::Path) notifyObservers(SubscriptionType::Path);
+    else if (info.buildingType==BuildingType::Tile){
+        triggeredResource = whoNotified.getInfo().resource;
+        notifyObservers(SubscriptionType::Builder);
+        notifyObservers(SubscriptionType::Tile);
+    }
 }
 
 

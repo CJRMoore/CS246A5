@@ -29,13 +29,13 @@ class AbstractAddress: public Observer, public Subject {
         this->owner = other.getOwner();
         this->triggeredResource = other.getInfo().resource;
         return *this;
-    };*/
+    };
     AbstractAddress &operator=(AbstractAddress &&other){
         this->index = other.getIndex();
         this->owner = other.getOwner();
         this->triggeredResource = other.triggeredResource;
         return *this;
-    };
+    };*/
 
     virtual std::vector<int> upgradeRequirements(Builder &b) = 0;
     virtual int getIndex() { return index; };
