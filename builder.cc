@@ -58,6 +58,7 @@ shared_ptr<AbstractAddress> Builder::buildAtAddress(shared_ptr<AbstractAddress> 
         for (int i=0; i<resources.size(); i++) resources[i] -= req[i];
         ownedAddresses.push_back(a);
         numPoints++;
+        cout << "Address built at " << a->getIndex() << "." << endl;
         return na;
     }
     catch(int){
@@ -97,6 +98,7 @@ shared_ptr<AbstractAddress> Builder::upgradeAddress(shared_ptr<AbstractAddress> 
                 break;
             }
         }
+        cout << (a->getResLevel()==1?"Basement":"House") << " upgraded to " << (a->getResLevel()==1?"House.":"Tower.") << endl;
         return na;
     }
     catch(int){
