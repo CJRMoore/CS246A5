@@ -14,6 +14,12 @@
 
 using namespace std;
 
+void GameBoard::reset(){
+    theBoard.resize(0);
+    theAddresses.resize(0);
+    thePaths.resize(0);
+}
+
 void GameBoard::Init(string boardFile, vector<shared_ptr<Builder> > &thePlayers) {
     // Set up tiles and read tile layout from file
     // In principle, would work for expanded board size
@@ -73,7 +79,7 @@ void GameBoard::Init(string boardFile, vector<shared_ptr<Builder> > &thePlayers)
     // Set up paths
     for (int r=0; r<72; r++) thePaths.push_back(make_shared<Path>(r));
 
-    // Set up address-path observer-subject relationships
+    // Set up address-tile observer-subject relationships
     // Hard-coded because I don't want to learn graph theory
     ifstream apf("TileAddressRelationship.txt");
     string line;
@@ -87,6 +93,20 @@ void GameBoard::Init(string boardFile, vector<shared_ptr<Builder> > &thePlayers)
         theBoard[tile]->attach(theAddresses[ad2+1]);
         theBoard[tile]->attach(theAddresses[ad3]);
         theBoard[tile]->attach(theAddresses[ad3+1]);
+    }
+
+    // Set up adddress-path oberver-subect relationships
+    ifstream atf("AddressPathRelationship.txt");
+    while (getline(atf,line)){
+        stringstream ss(line);
+        int address, path;
+        ss >> address;
+        while (true){
+            ss >> path;
+            if (ss.fail()) break;
+            theAddresses[address]->attach(thePaths[path]);
+            thePaths[path]->attach(theAddresses[address]);
+        }
     }
 
     // Set up players, then have them place their first residences

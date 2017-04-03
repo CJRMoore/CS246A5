@@ -11,7 +11,13 @@ class Path: public AbstractPath{
   public:
     Path(int index): AbstractPath(index) {};
     ~Path() {};
+    
+    // Subject Overrides
     Info getInfo() const override;
+
+    // Observer overrides
+    void notify(Subject &whoNotified) override;
+    SubscriptionType subType() const override;
 
     bool hasRoad() const override { return false; };
     

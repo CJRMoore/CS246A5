@@ -1,11 +1,12 @@
 #ifndef ABSTRACTPATH_H
 #define ABSTRACTPATH_H
 #include "subject.h"
+#include "observerh"
 #include "buildertype.h"
 
 class Builder;
 
-class AbstractPath: public Subject {
+class AbstractPath: public Subject, public Observer {
   protected:
     const int index;
     BuilderType owner;

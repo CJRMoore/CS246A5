@@ -9,6 +9,28 @@
 #include "resources.h"
 using namespace std;
 
+void help(){
+    cout << "=============================" << endl
+         << "== Welcome to Constructor! ==" << endl
+         << "=============================" << endl << endl
+         << "This is a game is based on the popular board game, Settlers of Catan, but adapted to the University of Waterloo campus.  For game insstructions, please see Settlers of Catan rules." << endl << endl
+         << "Valid moves at beginning of turn:" << endl
+         << "\tloaded:\tSet dice to loaded (player chooses dice roll between 2 and 12).  \n\t\tAt beginning of game, all players have loaded dice." << endl
+         << "\tfair:\tSet dice to fair.  Two dice are randomly rolled." << endl
+         << "\troll:\tRoll chosen dice." << endl << endl
+         << "Valid moves after rolling:" << endl
+         << "\tboard:\tPrint the board to the command line." << endl
+         << "\tstatus:\tPrint player points and resources." << endl
+         << "\tresidences:\tPrint the address and type of residence owned by the player." << endl
+         << "\thelp:\tPrint this help message." << endl
+         << "\tnext:\tfinish turn" << endl
+         << "\tbuild-road <road#>:\tBuild road at the number given.\n\t\t\t\tPlayer must have enough resources, and path must not be owned." << endl
+         << "\tbuild-res <address>:\tBuild residence at address given.  \n\t\t\t\tPlayer must have enough resoures, and address must not\n\t\t\t\thave a residence already built." << endl
+         << "\timprove <address>:\tImprove residence.  Player must have enough resources, \n\t\t\t\tand residence must have been built." << endl
+         << "\ttrade <player> <give> <take>:\tTrade with other player, and give one resource\n\t\t\t\t\tto take one resource." << endl
+         << "\tsave <file>:\tSave game to file. Load later from command line." << endl; 
+}
+
 int main(int argc, char** argv) {
     // parse command line options
     bool seedSet = false;
@@ -126,19 +148,25 @@ int main(int argc, char** argv) {
             bool rolled = false;
             while (!rolled){
                 cin >> cmd;
-                if (cmd == "loaded"){ // Set dice to loaded 
+                // Set dice to loaded
+                if (cmd == "loaded"){
                     cout << "Dice set to loaded." << endl;
                     currPlayer->setDice(0);
                 }
-                else if (cmd == "fair"){ // Set dice to fair
+                // Set dice to fair
+                else if (cmd == "fair"){
                     cout << "Dice set to fair." << endl;
                     currPlayer->setDice(1);
                 }
-                else if (cmd == "roll"){ // Roll dice
+                // Roll dice
+                else if (cmd == "roll"){
                     g.distributeResources(currPlayer->roll());
                     for (int i=0; i<thePlayers.size(); i++) thePlayers[i]->printTurnGains();
                     rolled = true;
                 }  
+                else if (cmd == "help"){
+                    help();
+                }
                 else{
                     cout << "Invalid action; currently valid actions are 'loaded', 'fair', and 'roll'" << endl;
                 }
@@ -146,41 +174,52 @@ int main(int argc, char** argv) {
             while (true){
                 cin >> cmd;
                 try{
-                    if (cmd == "loaded"){ // Set dice to loaded 
+                    // Set dice to loaded
+                    if (cmd == "loaded"){
                         cout << "Dice set to loaded." << endl;
                         currPlayer->setDice(0); 
                     }
-                    else if (cmd == "fair"){ // Set dice to fair
+                    // Set dice to fair
+                    else if (cmd == "fair"){ 
                         cout << "Dice set to fair." << endl;
                         currPlayer->setDice(1); 
                     }
-                    else if (cmd == "roll"){ // Roll dice
+                    // Roll dice
+                    else if (cmd == "roll"){
                         cout << "Already rolled." << endl;
                     }
                     else if (cmd == "board"){ // Print board (TO BE IMPLEMENTED
                     }
-                    else if (cmd == "status"){ cout << currPlayer; } // Print status of player
-                    else if (cmd == "residences"){ // Print player's residences
+                    // Print status of plyer
+                    else if (cmd == "status"){ 
+                        cout << currPlayer; 
+                    }
+                    // Print player's residences
+                    else if (cmd == "residences"){
                         cout << g.getColours()[turnCounter] << " has built:" << endl 
                              << currPlayer->listOwnedResidences();
                     }
-                    else if (cmd == "build-road"){  // Build road on unused path
+                    // Build road on unused path
+                    else if (cmd == "build-road"){
                         int path;
                         cin >> path;
                         g.buildRoad(currPlayer, path);
                     }
-                    else if (cmd == "build-res"){ // Build residence at unused address
+                    // Build residence at unused address
+                    else if (cmd == "build-res"){
                         int res;
                         cin >> res;
                         g.buildResidence(currPlayer, res);
                     }
-                    else if (cmd == "improve"){ // Improve existing residence located at address
+                    // Improve existing residence located at address
+                    else if (cmd == "improve"){
                         int res;
                         cin >> res;
                         g.upgradeResidence(currPlayer, res);
                     }
                     else if (cmd == "trade"){} // Trade with other player
-                    else if (cmd == "save"){ // Save game to file
+                    // Save game to file
+                    else if (cmd == "save"){
                         string sFile;
                         cin >> sFile;
                         ofstream f(sFile);
@@ -196,8 +235,12 @@ int main(int argc, char** argv) {
                             break;
                         }
                     }
-                    else if (cmd == "help"){} // Print help text
-                    else if (cmd == "next"){ // Finish turn
+                    // Print help text
+                    else if (cmd == "help"){
+                        help();
+                    }
+                    // Finish turn
+                    else if (cmd == "next"){
                         turnCounter = (turnCounter+1)%4;
                         cout << endl;
                         break;
@@ -216,6 +259,37 @@ int main(int argc, char** argv) {
                     cout << s << endl;
                 }
             }
+            // Check if any player won
+            bool hasWon = false;
+            for (int i=0; i<thePlayers.size(); i++){
+                if (thePlayers[i]->isWon()){
+                    cout << "Player " << g.getColours()[i] << " has won with " << thePlayers[i]->getNumPoints() << " points!" << endl
+                    << "Would you like to play again? [y/n]" << endl;
+                    string ans;
+                    cin >> ans;
+                    // End game
+                    if (ans == "n" || ans == "N"){
+                        done = true;
+                    }
+                    // Restart game
+                    else if (ans == "y" || ans == "Y"){
+                        thePlayers.resize(0);
+                        for (int i=0; i<4; i++) {
+                            thePlayers.push_back(make_unique<Builder>(BuilderType(i)));
+                            if (seedSet) thePlayers.back()->setSeed(seed);
+                        }
+                        stringstream ss;
+                        ss << g.save();
+                        g.reset();
+                        g.Init(ss.str(), thePlayers);
+                    }
+                    else{
+                        cout << "Unknown answer." << endl;
+                        cout << "Would you like to play again? [y/n]" << endl;
+                    }
+                }
+            }
+
         }
     }
     catch (ios::failure &) {

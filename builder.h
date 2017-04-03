@@ -51,6 +51,10 @@ class Builder: public Observer{
     void setDice(bool whichDice);
     void printTurnGains();
 
+
+    void tradeWithPlayer(std::shared_ptr<Builder>);
+    std::string getNumPoints();
+
     std::string listOwnedResidences();
 
     void restorePlayerStats(GameBoard &g, std::string &s);

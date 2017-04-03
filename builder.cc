@@ -64,6 +64,10 @@ shared_ptr<AbstractAddress> Builder::buildAtAddress(shared_ptr<AbstractAddress> 
         cout << "You do not have enough resources." << endl;
         return a;
     }
+    catch(string s){
+        cout << s << endl;
+        return a;
+    }
 }
 
 shared_ptr<AbstractAddress> Builder::upgradeAddress(shared_ptr<AbstractAddress> a) {
@@ -179,6 +183,9 @@ string Builder::listOwnedResidences(){
 }
 
 
+
+
+
 bool Builder::isWon() {
     return numPoints>=10?true:false;
 }
@@ -205,6 +212,12 @@ void Builder::printTurnGains(){
         if (turnGains[i]>0) cout << "\t" << turnGains[i] << " " << resourceStr[i] << endl;
         turnGains[i] = 0;
     }
+}
+
+string Builder::getNumPoints(){
+    stringstream ss;
+    ss << numPoints;
+    return ss.str();
 }
 
 SubscriptionType Builder::subType() const {

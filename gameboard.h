@@ -23,6 +23,7 @@ class GameBoard {
 
   public:
     void Init(std::string boardFile, std::vector<std::shared_ptr<Builder> > &thePlayers);
+    void reset();
     void setSeed(unsigned int s);
     void moveGeese(int t);
     std::string save();

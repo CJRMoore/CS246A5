@@ -11,6 +11,7 @@ class Address: public AbstractAddress {
 
   public:
     Address(int index): AbstractAddress(index) {};
+    Address(const Address &other): AbstractAddress(other.index) {};
 
     void notify(Subject &whoNotified) override;
     int getResLevel() override { return 0; };
