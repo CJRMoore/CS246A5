@@ -7,11 +7,11 @@
 #include "tile.h"
 #include <memory>
 
-class Geese: public Observer, public Subject {
+class Geese: public Tile {
     std::shared_ptr<Tile> currTile;
 
   public:
-    Geese(shared_ptr<Tile> currTile)
+    Geese(std::shared_ptr<Tile> currTile)
         : currTile(currTile) {};
 
     int getDiceValue() override { return currTile->getDiceValue(); };

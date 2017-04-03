@@ -14,6 +14,7 @@ class Tile: public Observer, public Subject {
   public:
     Tile(int resource, int index, int diceValue)
         : resource(ResourceType(resource)), index(index), diceValue(diceValue) {};
+    Tile() : resource(ResourceType::PARK), index(-1), diceValue(-1) {};
 
     void notify(Subject &whoNotified) override;
     SubscriptionType subType() const override;
