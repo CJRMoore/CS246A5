@@ -19,7 +19,7 @@ vector<string> Builder::playerColours = vector<string>(0);
 vector<string> Builder::resourceStr = vector<string>(0);
 
 Builder::Builder(BuilderType colour)
-: colour(colour), rolled(false), numPoints(0)
+: colour(colour), numPoints(0)
 {
     resources.resize(5,99);
     turnGains.resize(5,0);
@@ -184,9 +184,9 @@ bool Builder::isWon() {
 }
 
 int Builder::roll(){
-    if (rolled) throw(string("Already rolled."));
+    //if (rolled) throw(string("Already rolled."));
     int r = currDice->rollDice();
-    rolled = true;
+    //rolled = true;
     return r;
 }
 

@@ -25,7 +25,6 @@ class Builder: public Observer{
     static std::vector<std::string> playerColours;
     static std::vector<std::string> resourceStr;
 
-    bool rolled;
     unsigned int numPoints;
     std::vector<std::shared_ptr<AbstractAddress> > ownedAddresses;
     std::vector<std::shared_ptr<AbstractPath> > ownedRoads;
@@ -50,7 +49,6 @@ class Builder: public Observer{
     void resetResources();
     void setResources(std::vector<int> r){ resources = r; };
     void setDice(bool whichDice);
-    void resetTurn(){ rolled = false; };
     void printTurnGains();
 
     std::string listOwnedResidences();

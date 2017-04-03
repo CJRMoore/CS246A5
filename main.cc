@@ -113,7 +113,7 @@ int main(int argc, char** argv) {
             }
         }
         shared_ptr<Builder> currPlayer;
-        thePlayers[0]->resetResources();
+        //thePlayers[0]->resetResources();
 
         // ------- Begin/resume game -------
         bool done = false;
@@ -122,9 +122,29 @@ int main(int argc, char** argv) {
             cout << "Builder " << g.getColours()[turnCounter] << "'s turn." << endl;
             cout << currPlayer;
 
+            // Make player roll dice
+            bool rolled = false;
+            while (!rolled){
+                cin >> cmd;
+                if (cmd == "loaded"){ // Set dice to loaded 
+                    cout << "Dice set to loaded." << endl;
+                    currPlayer->setDice(0);
+                }
+                else if (cmd == "fair"){ // Set dice to fair
+                    cout << "Dice set to fair." << endl;
+                    currPlayer->setDice(1);
+                }
+                else if (cmd == "roll"){ // Roll dice
+                    g.distributeResources(currPlayer->roll());
+                    for (int i=0; i<thePlayers.size(); i++) thePlayers[i]->printTurnGains();
+                    rolled = true;
+                }  
+                else{
+                    cout << "Invalid action; currently valid actions are 'loaded', 'fair', and 'roll'" << endl;
+                }
+            }
             while (true){
                 cin >> cmd;
-            
                 try{
                     if (cmd == "loaded"){ // Set dice to loaded 
                         cout << "Dice set to loaded." << endl;
@@ -135,8 +155,7 @@ int main(int argc, char** argv) {
                         currPlayer->setDice(1); 
                     }
                     else if (cmd == "roll"){ // Roll dice
-                        g.distributeResources(currPlayer->roll()); 
-                        for (int i=0; i<thePlayers.size(); i++) thePlayers[i]->printTurnGains();
+                        cout << "Already rolled." << endl;
                     }
                     else if (cmd == "board"){ // Print board (TO BE IMPLEMENTED
                     }
@@ -197,7 +216,6 @@ int main(int argc, char** argv) {
                     cout << s << endl;
                 }
             }
-            for (unsigned int i=0; i<thePlayers.size(); i++) thePlayers[i]->resetTurn();
         }
     }
     catch (ios::failure &) {
