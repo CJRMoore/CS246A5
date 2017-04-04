@@ -4,6 +4,7 @@
 #include "observer.h"
 #include "subscriptions.h"
 #include "buildertype.h"
+#include "resources.h"
 
 class Builder;
 
@@ -11,11 +12,13 @@ class AbstractPath: public Subject, public Observer {
   protected:
     const int index;
     BuilderType owner;
-    bool tripped;
+    bool validPlacement;
+    bool underConsideration;
+    ResourceType resource; // Used for path finding stuff
 
   public:
-    AbstractPath(): index(-1), owner(BuilderType::None), tripped(false) {};
-    AbstractPath(int index): index(index), owner(BuilderType::None), tripped(false) {};
+    AbstractPath(): index(-1), owner(BuilderType::None), validPlacement(false), underConsideration(false), resource(ResourceType::PARK) {};
+    AbstractPath(int index): index(index), owner(BuilderType::None), validPlacement(false), underConsideration(false), resource(ResourceType::PARK) {};
     virtual bool hasRoad() const = 0;
     virtual int getIndex() { return index; };
 

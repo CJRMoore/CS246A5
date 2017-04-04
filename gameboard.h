@@ -19,8 +19,6 @@ class GameBoard {
     //std::vector<std::unique_ptr<Builder> > thePlayers;
     std::vector<std::string> theColours;
 
-    Geese g;
-
   public:
     void Init(std::string boardFile, std::vector<std::shared_ptr<Builder> > &thePlayers);
     void reset();

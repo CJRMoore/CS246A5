@@ -10,7 +10,7 @@
 using namespace std;
 
 Info Path::getInfo() const {
-    Info info{BuildingType::Path, owner, index, tripped?ResourceType::BRICK:ResourceType::PARK};
+    Info info{BuildingType::Path, owner, index, resource};
     return info;
 }
 
@@ -19,19 +19,44 @@ vector<int> Path::upgradeRequirements(Builder &b){
     theRequirements[3] = 1; // 1 Heat
     theRequirements[4] = 1; // 1 Wifi
 
+    // These change when notifyObserver is called
+    validPlacement = false;
+    underConsideration = true;
+    owner = b.getColour();
+    resource = ResourceType::BRICK;
+
+    notifyObservers(SubscriptionType::Path);
+    notifyObservers(SubscriptionType::Tile);
+
+    if (!validPlacement) {
+        validPlacement = false;
+        underConsideration = false;
+        throw(string("Invalid location for road; must be adjacent to a building or another road."));
+    }
+    owner = BuilderType::None;
+    resource = ResourceType::PARK;
+    validPlacement = false;
+    underConsideration = false;
+
     if (theRequirements.size()>0) owner = b.getColour();
     return theRequirements;
 }
 
 
 void Path::notify(Subject &whoNotified){
-    cout << "PATH NOTIFIED";
     Info info = whoNotified.getInfo();
-    if (info.owner!=BuilderType::None) {
-        cout << " & NOTIFYING OBSERVERS";
-        tripped = true;
-        notifyObservers(SubscriptionType::Tile);
-        tripped = false;
+
+    if (info.buildingType==BuildingType::Path && owner==info.owner && owner!=BuilderType::None && index!=info.index){
+        if (underConsideration){
+            validPlacement = true;
+        }
+        else if (info.resource!=ResourceType::PARK){
+            notifyObservers(SubscriptionType::Path);
+        }
+        return;
     }
-    cout << endl;
+    else if (info.buildingType==BuildingType::Address && info.owner==owner && owner!=BuilderType::None){
+        if (underConsideration) validPlacement = true;
+        return;
+    }
 }

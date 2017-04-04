@@ -122,6 +122,7 @@ shared_ptr<AbstractPath> Builder::upgradePath(shared_ptr<AbstractPath> p) {
         shared_ptr<AbstractPath> np = make_shared<Road>(p);
         for (int i=0; i<resources.size(); i++) resources[i] -= req[i];
         ownedRoads.push_back(p);
+        cout << "Road built at " << p->getIndex() << "." << endl;
         return np;
     }
     catch(int){
@@ -139,8 +140,8 @@ void Builder::restorePlayerStats(GameBoard &g, std::string &s){
                                           // ensures buildings and roads will be completed
     string l;
     ss >> l;
-    shared_ptr<Builder> me;
-    me.reset(this);
+    shared_ptr<Builder> me{this};
+
     // Player owned roads
     if (l == "r"){
         string l2;

@@ -10,8 +10,7 @@ using namespace std;
 Tower::Tower(shared_ptr<AbstractAddress> aa)
     : Residence(aa) 
 {
-    shared_ptr<Tower> tmp;
-    tmp.reset(this);
+    shared_ptr<Tower> tmp{this};
     aa->attach(tmp);
 }
 

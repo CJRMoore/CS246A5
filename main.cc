@@ -160,9 +160,14 @@ int main(int argc, char** argv) {
                 }
                 // Roll dice
                 else if (cmd == "roll"){
-                    g.distributeResources(currPlayer->roll());
-                    for (int i=0; i<thePlayers.size(); i++) thePlayers[i]->printTurnGains();
-                    rolled = true;
+                    try{
+                        g.distributeResources(currPlayer->roll());
+                        for (int i=0; i<thePlayers.size(); i++) thePlayers[i]->printTurnGains();
+                        rolled = true;
+                    }
+                    catch(string s){
+                        cout << s << endl;
+                    }
                 }  
                 else if (cmd == "help"){
                     help();
@@ -245,6 +250,17 @@ int main(int argc, char** argv) {
                         cout << endl;
                         break;
                     }
+                    // Quit game
+                    else if (cmd == "quit"){
+                        cout << "Do you really want to quit?  Unsaved progress will be lost. [y/n]" << endl;
+                        string ans;
+                        cin >> ans;
+                        if (ans=="y" || ans=="Y"){
+                            done = true;
+                            break;
+                        }
+                    }
+                    // debugging purposes
                     else if (cmd == "cheat"){
                         cout << "THIS IS FOR DEBUGGING PURPOSES! Enable? [y/n]" << endl;
                         string in;
@@ -294,4 +310,5 @@ int main(int argc, char** argv) {
     }
     catch (ios::failure &) {
     }
+    cout << "Thanks for playing!" << endl;
 }

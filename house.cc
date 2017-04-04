@@ -10,8 +10,7 @@ using namespace std;
 House::House(shared_ptr<AbstractAddress> aa)
     : Residence(aa) 
 {
-    shared_ptr<House> tmp;
-    tmp.reset(this);
+    shared_ptr<House> tmp{this};
     aa->attach(tmp);
 }
 
@@ -46,8 +45,7 @@ vector<int> House::upgradeRequirements(Builder &b){
     theRequirements[4] = 1; // 1 wifi
 
     if (theRequirements.size()>0) {
-        shared_ptr<Builder> pb;
-        pb.reset(&b);
+        shared_ptr<Builder> pb{&b};
         attach(pb);
     }
     return theRequirements;

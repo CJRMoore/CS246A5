@@ -22,6 +22,10 @@ void Address::notify(Subject &whoNotified){
         adjacent = true;
         return;
     }
+    else if (info.buildingType==BuildingType::Path && info.owner==owner){
+        notifyObservers(SubscriptionType::Path);
+        return;
+    }
     
     triggeredResource = whoNotified.getInfo().resource;
     if (owner == BuilderType::None) return;
@@ -52,8 +56,7 @@ vector<int> Address::upgradeRequirements(Builder &b){
     theRequirements[4] = 1; // 1 wifi
 
     if (theRequirements.size()>0) {
-        shared_ptr<Builder> pb;
-        pb.reset(&b);
+        shared_ptr<Builder> pb{&b};
         attach(pb);
         owner = b.getColour();
     }

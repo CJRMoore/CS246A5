@@ -81,9 +81,9 @@ void GameBoard::Init(string boardFile, vector<shared_ptr<Builder> > &thePlayers)
 
     // Set up address-tile observer-subject relationships
     // Hard-coded because I don't want to learn graph theory
-    ifstream apf("TileAddressRelationship.txt");
+    ifstream atf("TileAddressRelationship.txt");
     string line;
-    while (getline(apf,line)){
+    while (getline(atf,line)){
         stringstream ss(line);
         int tile, ad1, ad2, ad3;
         ss >> tile >> ad1 >> ad2 >> ad3;
@@ -105,6 +105,33 @@ void GameBoard::Init(string boardFile, vector<shared_ptr<Builder> > &thePlayers)
             ss >> a2;
             if (ss.fail()) break;
             theAddresses[a1]->attach(theAddresses[a2]);
+        }
+    }
+
+    // Set up address-path relationship
+    ifstream apf("AddressPathRelationship.txt");
+    while(getline(apf,line)){
+        stringstream ss(line);
+        int address, path;
+        ss >> address;
+        while(true){
+            ss >> path;
+            if (ss.fail()) break;
+            theAddresses[address]->attach(thePaths[path]);
+            thePaths[path]->attach(theAddresses[address]);
+        }
+    }
+
+    // Set up path-path relationship
+    ifstream ppf("PathPathRelationship.txt");
+    while(getline(ppf,line)){
+        stringstream ss(line);
+        int p1, p2;
+        ss >> p1;
+        while (true){
+            ss >> p2;
+            if (ss.fail()) break;
+            thePaths[p1]->attach(thePaths[p2]);
         }
     }
 

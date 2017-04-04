@@ -11,8 +11,7 @@ using namespace std;
 Basement::Basement(shared_ptr<AbstractAddress> aa)
     : Residence(aa) 
 {
-    shared_ptr<Basement> tmp;
-    tmp.reset(this);
+    shared_ptr<Basement> tmp{this};
     aa->attach(tmp);
 }
 
@@ -45,8 +44,7 @@ vector<int> Basement::upgradeRequirements(Builder &b){
     theRequirements[3] = 3; // 3 heat
 
     if (theRequirements.size()>0) {//attach(make_shared<Builder>(b));
-        shared_ptr<Builder> pb;
-        pb.reset(&b);
+        shared_ptr<Builder> pb{&b};
         attach(pb);
     }
     return theRequirements;
